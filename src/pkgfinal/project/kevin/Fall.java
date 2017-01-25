@@ -24,20 +24,20 @@ public class Fall extends JComponent implements KeyListener {
     static final int HEIGHT = 600;
     // sets the framerate and delay for our game
     // you just need to select an approproate framerate
-    long desiredFPS = 60;
-    long desiredTime = (1000) / desiredFPS;
+    long desiredFPS = 200;
+     long desiredTime = (1000) / desiredFPS;
     Color skyColour = new Color(58, 214, 196);
     Rectangle dude = new Rectangle(100, 200, 50, 50);
     int gravity = 1;
     boolean start = false;
     boolean dead = false;
+    boolean done = false;
     int dy = 0;
-    int jumpVelocity = -15;
-    // jump key variable
+
     boolean jump = false;
-    Rectangle[] LeftLine = new Rectangle[5];
-    Rectangle[] RightLine = new Rectangle[5];
-    boolean[] passedLine = new boolean[5];
+    Rectangle[] LeftLine = new Rectangle[1];
+    Rectangle[] RightLine = new Rectangle[1];
+    // boolean[] passedLine = new boolean[5];
     // the gap between top and bottom
     int lineGap = 150;
     // distance between the pipes
@@ -48,9 +48,12 @@ public class Fall extends JComponent implements KeyListener {
     int lineHeight = 5;
     // minimum distance from edge
     int lineDistance = 200;
+    
+
+    int lineY = 500;
     int minDistance = 100;
     // speed of the game
-    int speed = 1;
+    int speed = 6;
     boolean right = false;
     boolean left = false;
 
@@ -62,19 +65,19 @@ public class Fall extends JComponent implements KeyListener {
         // always clear the screen first!
         g.clearRect(0, 0, WIDTH, HEIGHT);
 
-
         // GAME DRAWING GOES HERE 
-
-
         g.setColor(skyColour);
         g.fillRect(0, 0, WIDTH, HEIGHT);
         g.fillRect(0, 0, WIDTH, HEIGHT);
         // GAME DRAWING GOES HERE 
         g.setColor(Color.BLACK);
         for (int i = 0; i < LeftLine.length; i++) {
+            //g.fillRect(90, 500, 600, 5);
+            //System.out.println("LeftLine.length="+LeftLine.length);
+            //System.out.println(LeftLine[i].y);
+            // System.out.println("rightLine.length="+RightLine.length);
             g.fillRect(RightLine[i].x, RightLine[i].y, RightLine[i].width, RightLine[i].height);
             g.fillRect(LeftLine[i].x, LeftLine[i].y, LeftLine[i].width, LeftLine[i].height);
-
             g.setColor(Color.BLACK);
             g.fillRect(dude.x, dude.y, 25, 25);
         }
@@ -95,23 +98,24 @@ public class Fall extends JComponent implements KeyListener {
     }
 
     public void reset() {
-        int pipeX = 600;
+        int lineX = 600;
     }
 
     public int randInt(int min, int max) {
         return (int) (Math.random() * (max - min + 1) + min);
     }
 
-    public void setline(int linePosition) {
+    public void setline() {
         // a random number generator
         Random randGen = new Random();
         // generate a random X position
-        int lineX = randInt(0, 400);
+        int lineX = randInt(0, 700);
         // generate the new pipe Y coordinate
-        int lineY = (600);
-        lineX = lineX + (lineWidth + lineSpacing) * LeftLine.length;
-        LeftLine[linePosition].setBounds(lineX, lineY, WIDTH, HEIGHT);
-        RightLine[linePosition].setBounds(lineX- lineGap - lineWidth, lineY, WIDTH,HEIGHT);
+        System.out.println("linewidth" + LeftLine[0].y);
+
+        //lineY = lineY - (lineWidth + lineSpacing) * LeftLine.length;
+        LeftLine[0].setBounds(0, LeftLine[0].y, lineWidth, lineHeight);
+        RightLine[0].setBounds(lineWidth + lineGap, LeftLine[0].y, WIDTH - lineWidth - lineGap, lineHeight);
 
     }
     // The main game loop
@@ -124,109 +128,143 @@ public class Fall extends JComponent implements KeyListener {
         long startTime;
         long deltaTime;
         int lineX = 0;
-        Random randGen = new Random();
-        for (int i = 0; i < LeftLine.length; i++) {
+        
+        
+         Random randGen = new Random();
+        if (!start){
+                for (int i = 0; i < 1; i++) {
             // generating a random y position
-            int lineY = (500);
-            RightLine[i] = new Rectangle(lineX, lineY, lineWidth, lineHeight);
-            LeftLine[i] = new Rectangle(lineX, lineY, lineWidth, lineHeight);
-            lineX = lineX + lineWidth;
-        }
+           
+            int lineWidth = 50;
+           
+            RightLine[i] = new Rectangle(0, lineY, lineWidth, lineHeight);
+            LeftLine[i] = new Rectangle(lineWidth+lineGap, lineY, 800-lineWidth-lineGap, lineHeight);
+           
+            System.out.println("left1"+LeftLine[i].y);
+                }
+        
+    }
+        if (start){
+                for (int i = 0; i < 1; i++) {
+            // generating a random y position
+           
+            int lineWidth = randInt(0, 500);
+            lineY = lineY - 5;
+            RightLine[i] = new Rectangle(0, lineY, lineWidth, lineHeight);
+            LeftLine[i] = new Rectangle(lineWidth+lineGap, lineY, 800-lineWidth-lineGap, lineHeight);
+           
+            System.out.println("left2"+LeftLine[i].y);
+                }
+        
+    }
+
+
+       
+       
         // the main game loop section
         // game will end if you set done = false;
-        boolean done = false;
+       
+       
+        
         if (!done) {
             // determines when we started so we can keep a framerate
             startTime = System.currentTimeMillis();
+            
 
             // all your game rules and move is done in here
-            // GAME LOGIC STARTS HERE 
-
+            // GAME LOGIC STARTS HERE
             if (start) {
-                if (!dead) {
+                 
+                if (!done) {
 
-                    for (int i = 0; i < RightLine.length; i++) {
+                    for (int i = 0; i < 1; i++) {
+
                         RightLine[i].y = RightLine[i].y - speed;
                         LeftLine[i].y = LeftLine[i].y - speed;
                         // check if a pipe is off the screenfor(int i = 0; i < topPipes.length
-                       if(RightLine[i].x + lineWidth < 0){
-                    // move the pipe
-                    setline(i);
-                        }
+
+                      //  if (lineY == 0) {
+                            // move the pipe
+
+                       //     setline();
+                            
+
+                       // }
                     }
                     boolean grav = true;
-                   if (grav) {
+                    if (grav) {
                         dy = dy + gravity;
                         // apply the change in y to the dude
                         dude.y = dude.y + dy;
                     }
                     // get the dude to fall
-                    for (int i = 0; i < RightLine.length; i++) {
-                        if (dude.y == HEIGHT) {
-                            done = true;
+                    for (int i = 0; i < 1; i++) {
+                        if (dude.y == 0) {
+                            done = false;
+                        }
+                        // apply gravity
+                        if (left) {
+                            dude.x = dude.x - 8;
+                        }
+                        if (right) {
+                            dude.x = dude.x + 8;
+                        }
 
-                            // apply gravity
-                            if (left) {
-                                dude.x = dude.x - 8;
+                        if (dude.x < 0 || dude.x > 800) {
+                            dude.x = 0;
+                        } else if (dude.x + dude.width > WIDTH || dude.x + dude.width < 0) {
+                            dude.x = WIDTH - dude.width;
+                        }
+                        if (dude.y < 0) {
+                            dude.y = 0;
+                        } else if (dude.y + dude.height > HEIGHT) {
+                            dude.y = HEIGHT - dude.height;
+                        }
+
+                        for (int j = 0; j < 1; j++) {
+                            if (dude.intersects(RightLine[j])) {
+                                grav = true;
+                                done = true;
+                            } else if (dude.intersects(LeftLine[j])) {
+                                grav = true;
+                                done = true;
+                                // GAME LOGIC ENDS HERE 
+
                             }
-                            if (right) {
-                                dude.x = dude.x + 8;
-                            }
-                          
-                            if (dude.x < 0 || dude.x > 800) {
-                                dude.x = 0;
-                            } else if (dude.x + dude.width > WIDTH || dude.x + dude.width < 0) {
-                                dude.x = WIDTH - dude.width;
-                            }
-                            if (dude.y < 0) {
-                                dude.y = 0;
-                            } else if (dude.y + dude.height > HEIGHT) {
-                                dude.y = HEIGHT - dude.height;
-                            }
+                            // update the drawing (calls paintComponent)
+                            repaint();
 
-                            for (int j = 0; j < RightLine.length; j++) {
-                                if (dude.intersects(RightLine[i])) {
-                                    grav = false;
-                                } else if (dude.intersects(LeftLine[i])) {
-                                    grav = false;
-                                    // GAME LOGIC ENDS HERE 
-
-
-                                    // update the drawing (calls paintComponent)
-                                    repaint();
-
-
-
-                                    // SLOWS DOWN THE GAME BASED ON THE FRAMERATE ABOVE
-                                    // USING SOME SIMPLE MATH
-                                    deltaTime = System.currentTimeMillis() - startTime;
-                                    try {
-                                        if (deltaTime > desiredTime) {
-                                            //took too much time, don't wait
-                                            Thread.sleep(1);
-                                        } else {
-                                            // sleep to make up the extra time
-                                            Thread.sleep(desiredTime - deltaTime);
-                                        }
-                                    } catch (Exception e) {
-                                    };
-                                
+                            // SLOWS DOWN THE GAME BASED ON THE FRAMERATE ABOVE
+                            // USING SOME SIMPLE MATH
+                            deltaTime = System.currentTimeMillis() - startTime;
+                            try {
+                                if (deltaTime > desiredTime) {
+                                    //took too much time, don't wait
+                                    
+                                    Thread.sleep(1);
+                                } else {
+                                    // sleep to make up the extra time
+                                  
+                                   // Thread.sleep(desiredTime - deltaTime);
+                                   Thread.sleep(1000);
                                 }
-                            }
+                            } catch (Exception e) {
+                            };
+
                         }
                     }
                 }
             }
-                        
         }
+
     }
-                                                                                               
-                  
-                   /** 
-                    * @param args the command line arguments
-                  */   
+
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
         // creates a windows to show my game
+
         JFrame frame = new JFrame("My Game");
 
         // creates an instance of my game
@@ -248,8 +286,13 @@ public class Fall extends JComponent implements KeyListener {
         frame.setVisible(true);
 
         // starts my game loop 
-        game.run();
-    
+        boolean done = true;
+
+        while (done) {
+            //int lineY=500;
+            game.run();
+
+        }
     }
 
     @Override
